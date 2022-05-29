@@ -1,2 +1,3 @@
 # Bhojpur Mathematics - Solver Engine
-The Bhojpur Mathematics is a software-as-a-service product used as a Mathematics Engine based on Bhojpur.NET Platform for application delivery.
+
+The `Bhojpur Mathematics` is a Mathematics engine based on the [Bhojpur.NET Platform](https://github.com/bhojpur/platform/) for application delivery.
