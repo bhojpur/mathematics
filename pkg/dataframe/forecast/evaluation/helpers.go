@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package evaluation
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
-
 import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
+	"math"
 )
 
-func main() {
-	cmd.Execute()
+func isInvalidFloat64(val float64) bool {
+	if math.IsInf(val, 0) || math.IsNaN(val) {
+		return true
+	}
+	return false
 }

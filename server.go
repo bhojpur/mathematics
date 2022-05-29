@@ -28,7 +28,6 @@ import (
 
 	_ "github.com/bhojpur/mathematics/pkg/webui"
 	_ "github.com/lib/pq"
-	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 
 func main() {

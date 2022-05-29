@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package dataframe
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,65 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
-
 import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
+	"errors"
+	"fmt"
 )
 
-func main() {
-	cmd.Execute()
+// ErrNoRows signifies that the Series, Dataframe or import data
+// contains no rows of data.
+var ErrNoRows = errors.New("contains no rows")
+
+const (
+	// FALSE is used convert a false (bool) to an int.
+	FALSE = 0
+	// TRUE is used convert a true (bool) to an int.
+	TRUE = 1
+)
+
+// B converts a boolean to an int.
+func B(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }
+
+// IsValidFloat64 returns true if f is neither Nan nor ±Inf.
+// Otherwise it returns false.
+func IsValidFloat64(f float64) bool {
+
+	if isNaN(f) {
+		return false
+	}
+
+	if isInf(f, 0) {
+		return false
+	}
+
+	return true
+}
+
+// BoolValueFormatter is used by SetValueToStringFormatter
+// to display an int as a bool. If the encountered value
+// is not a 0 or 1, it will panic.
+func BoolValueFormatter(v interface{}) string {
+	if v == nil {
+		return "NaN"
+	}
+
+	str := fmt.Sprintf("%v", v)
+	switch str {
+	case "0":
+		return "false"
+	case "1":
+		return "true"
+	default:
+		_ = v.(bool) // Intentionally panic
+		return ""
+	}
+}
+
+// DontLock is short-hand for various functions that permit disabling locking.
+var DontLock = dontLock
+var dontLock = Options{DontLock: true}

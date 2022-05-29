@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package dataframe
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
-
-import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
-)
-
-func main() {
-	cmd.Execute()
+// SeriesInit is used to configure the series
+// when it is initialized
+type SeriesInit struct {
+	// Prefill the series with nil ("NaN") with
+	// Size number of rows.
+	Size int
+	// How much memory to preallocate.
+	// If you know the size of the series in advance,
+	// it is better to preallocate the capacity of the
+	// underlying slice.
+	Capacity int
 }

@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package xseries
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
+import "strconv"
 
-import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
-)
-
-func main() {
-	cmd.Execute()
+func parseComplex(s string) (complex128, error) {
+	return strconv.ParseComplex(s, 128)
 }

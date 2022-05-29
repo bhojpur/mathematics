@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package dataframe
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
-
 import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
+	"errors"
+	"testing"
 )
 
-func main() {
-	cmd.Execute()
+var (
+	ErrTestA = errors.New("test A error")
+	ErrTestB = errors.New("test B error")
+	ErrTestC = errors.New("test C error")
+)
+
+func TestErrorCollection(t *testing.T) {
+
+	ec := NewErrorCollection()
+
+	// if !errors.Is(ec, nil) {
+	// 	t.Errorf("errors.Is(ec, nil) should return true")
+	// }
+
+	ec.AddError(ErrTestA)
+	ec.AddError(ErrTestB)
+
+	// Test nil
+	isNil := ec.IsNil()
+	if isNil == true {
+		t.Errorf("err collection should not be nil")
+	}
+
+	// Test items in Collection
+	resA := ec.Is(ErrTestA)
+	resB := ec.Is(ErrTestB)
+	resC := ec.Is(ErrTestC)
+
+	if resA == false {
+		t.Errorf("err collection should contain ErrTestA")
+	}
+
+	if resB == false {
+		t.Errorf("err collection should contain ErrTestB")
+	}
+
+	if resC == true {
+		t.Errorf("err collection should not contain ErrTestC")
+	}
 }

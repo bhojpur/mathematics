@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package dataframe
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
-
 import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
+	"fmt"
 )
 
-func main() {
-	cmd.Execute()
+// RowError signifies that a particular row contained or generated an error.
+type RowError struct {
+	Row int
+	Err error
+}
+
+// Error implements the error interface.
+func (re *RowError) Error() string {
+	return fmt.Sprintf("row: %d: %v", re.Row, re.Err)
+}
+
+// Unwrap implements the Wrapper interface.
+func (re *RowError) Unwrap() error {
+	return re.Err
 }

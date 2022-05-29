@@ -1,5 +1,4 @@
-//go:build client
-// +build client
+package evaluation
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -21,12 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
-
 import (
-	cmd "github.com/bhojpur/mathematics/cmd/client"
+	"context"
+	"math"
+
+	"github.com/bhojpur/mathematics/pkg/dataframe/forecast"
 )
 
-func main() {
-	cmd.Execute()
+// RootMeanSquaredError represents the root mean squared error.
+var RootMeanSquaredError = func(ctx context.Context, validationSet, forecastSet []float64, opts *forecast.EvaluationFuncOptions) (float64, int, error) {
+
+	// Check if validationSet and forecastSet are the same size
+	if len(validationSet) != len(forecastSet) {
+		return 0, 0, forecast.ErrMismatchLen
+	}
+
+	if len(validationSet) == 0 {
+		return 0.0, 0, forecast.ErrIndeterminate
+	}
+
+	sse, n, err := SumOfSquaredErrors(ctx, validationSet, forecastSet, opts)
+	if err != nil {
+		return 0.0, 0, err
+	}
+
+	return math.Sqrt(sse / float64(n)), n, nil
 }
